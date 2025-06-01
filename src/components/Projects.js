@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 const Projects = () => {
   const [activeFilter, setActiveFilter] = useState('Tous');
@@ -7,7 +7,7 @@ const Projects = () => {
   const [selectedProject, setSelectedProject] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState({});
 
-  const projects = [
+  const projects = useMemo(() => [
     {
       id: 1,
       title: "Procès-verbaux Électroniques",
@@ -16,12 +16,11 @@ const Projects = () => {
       technologies: ["React", "Nodejs", "MongoDB", "JWT"],
       images: [
         "images/login.jpg",
-        "images/p1.png", 
+        "images/p1.png",
         "images/p2.gif",
         "images/p3.gif",
         "images/p4.gif",
-        "images/p8.gif",
-      
+        "images/p8.gif",           
       ],
       demo: "#",
       status: "Production",
@@ -38,7 +37,7 @@ const Projects = () => {
         "images/z2.png",
         "images/z3.png",
         "images/z4.png",
-         "images/z5.png",
+        "images/z5.png",
         "images/z8.png",
       ],
       demo: "#",
@@ -57,8 +56,8 @@ const Projects = () => {
         "images/a3.png",
         "images/a4.png",
         "images/a5.png",
-         "images/a6.png",
-         "images/a7.png",
+        "images/a6.png",
+        "images/a7.png",
         "images/a8.png",
       ],
       demo: "#",
@@ -69,13 +68,12 @@ const Projects = () => {
       id: 4,
       title: " GuardPet – Application Mobile de Services pour Animaux de Compagnie",
       category: "UI/UX",
-      description: "Design d'application mobile pour Animaux  avec expérience utilisateur optimisée et interface moderne.",
+      description: "Design d'application mobile pour Animaux avec expérience utilisateur optimisée et interface moderne.",
       technologies: ["Figma", "Adobe XD", "Prototyping", "User Research"],
       images: [
         "images/u.png",
         "images/u1.png",
-       "images/u2.png",
-       
+        "images/u2.png",             
       ],
       demo: "#",
       status: "Production",
@@ -88,17 +86,17 @@ const Projects = () => {
       description: "Ce projet s'inscrit dans le cadre d'une formation en développement web et consiste à concevoir une interface utilisateur moderne et responsive pour un tableau de bord bancaire.",
       technologies: ["HTML", "CSS", "PHP", "MYSQL"],
       images: [
-       "images/f.png",
-       "images/f1.png",
+        "images/f.png",
+        "images/f1.png",
         "images/f2.png",
         "images/f3.png",
-         "images/f4.png",
-          "images/f5.png",
-           "images/f6.png",
-            "images/f7.png",
-             "images/f8.png",
-              "images/f9.png",
-              "images/f18.png",
+        "images/f4.png",
+        "images/f5.png",
+        "images/f6.png",
+        "images/f7.png",
+        "images/f8.png",
+        "images/f9.png",
+        "images/f18.png",
       ],
       demo: "#",
       status: "Production",
@@ -109,25 +107,24 @@ const Projects = () => {
       title: "Agence de voiture",
       category: "Frontend",
       description: "Le projet AutoSwift est une plateforme web moderne conçue pour une agence de location de voitures. Elle permet aux utilisateurs de consulter, réserver et gérer des véhicules en ligne de manière simple, rapide et sécurisée.",
-      technologies: ["HTML", "CSS" ],
+      technologies: ["HTML", "CSS"],
       images: [
-       "images/v.png",
-       "images/v1.png",
+        "images/v.png",
+        "images/v1.png",
         "images/v2.png",
         "images/v3.png",
-         "images/v4.png",
-          
+        "images/v4.png",               
       ],
       demo: "#",
       status: "Production",
       year: "2022"
     }
-  ];
+  ], []);
 
   const categories = ['Tous', 'Full Stack', 'Frontend', 'Data Science', 'UI/UX'];
-  
-  const filteredProjects = activeFilter === 'Tous' 
-    ? projects 
+
+  const filteredProjects = activeFilter === 'Tous'
+    ? projects
     : projects.filter(project => project.category === activeFilter);
 
   useEffect(() => {
@@ -147,7 +144,7 @@ const Projects = () => {
     }, 4000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [projects]);
 
   const containerStyle = {
     minHeight: '100vh',
@@ -224,8 +221,8 @@ const Projects = () => {
     padding: '12px 24px',
     borderRadius: '16px',
     border: 'none',
-    background: isActive 
-      ? 'linear-gradient(135deg, #60a5fa, #a78bfa)' 
+    background: isActive
+      ? 'linear-gradient(135deg, #60a5fa, #a78bfa)'
       : 'transparent',
     color: isActive ? 'white' : '#e2e8f0',
     fontWeight: isActive ? '600' : '500',
@@ -253,8 +250,8 @@ const Projects = () => {
     border: '1px solid rgba(255, 255, 255, 0.2)',
     transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
     transform: isHovered ? 'translateY(-8px) scale(1.02)' : 'translateY(0) scale(1)',
-    boxShadow: isHovered 
-      ? '0 25px 50px -12px rgba(139, 92, 246, 0.25)' 
+    boxShadow: isHovered
+      ? '0 25px 50px -12px rgba(139, 92, 246, 0.25)'
       : '0 10px 25px -5px rgba(0, 0, 0, 0.1)',
     cursor: 'pointer'
   });
@@ -281,8 +278,8 @@ const Projects = () => {
     borderRadius: '20px',
     fontSize: '0.75rem',
     fontWeight: '600',
-    background: status === 'Production' 
-      ? 'rgba(34, 197, 94, 0.9)' 
+    background: status === 'Production'
+      ? 'rgba(34, 197, 94, 0.9)'
       : 'rgba(59, 130, 246, 0.9)',
     color: 'white',
     backdropFilter: 'blur(8px)'
@@ -374,65 +371,7 @@ const Projects = () => {
     backdropFilter: 'blur(8px)'
   };
 
-  const buttonStyle = {
-    width: '100%',
-    padding: '14px 20px',
-    background: 'linear-gradient(135deg, #60a5fa, #a78bfa)',
-    color: 'white',
-    textDecoration: 'none',
-    borderRadius: '12px',
-    fontWeight: '600',
-    fontSize: '0.9rem',
-    textAlign: 'center',
-    transition: 'all 0.3s ease',
-    border: 'none',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '8px'
-  };
-
-  const statsContainerStyle = {
-    marginTop: '100px',
-    padding: '60px 0',
-    borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-    opacity: isVisible ? 1 : 0,
-    transform: isVisible ? 'translateY(0)' : 'translateY(30px)',
-    transition: 'all 0.8s ease 0.6s'
-  };
-
-  const statsGridStyle = {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-    gap: '40px',
-    textAlign: 'center'
-  };
-
-  const statItemStyle = {
-    background: 'rgba(255, 255, 255, 0.1)',
-    backdropFilter: 'blur(16px)',
-    padding: '32px 24px',
-    borderRadius: '20px',
-    border: '1px solid rgba(255, 255, 255, 0.2)'
-  };
-
-  const statNumberStyle = {
-    fontSize: '3rem',
-    fontWeight: '700',
-    background: 'linear-gradient(135deg, #60a5fa, #a78bfa)',
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
-    marginBottom: '8px'
-  };
-
-  const statLabelStyle = {
-    color: '#cbd5e1',
-    fontWeight: '500',
-    fontSize: '1rem'
-  };
-
-    // Modal styles
+  // Modal styles
   const modalOverlayStyle = {
     position: 'fixed',
     inset: 0,
@@ -472,7 +411,7 @@ const Projects = () => {
     margin: 0
   };
 
-  const closeButtonStyle = {
+    const closeButtonStyle = {
     background: 'rgba(255, 255, 255, 0.1)',
     border: 'none',
     borderRadius: '50%',
@@ -524,7 +463,6 @@ const Projects = () => {
   return (
     <section id="projects" style={containerStyle}>
       <div style={maxWidthStyle}>
-        
         {/* Header */}
         <div style={headerStyle}>
           <h2 style={titleStyle}>Mes Projets</h2>
@@ -563,20 +501,19 @@ const Projects = () => {
 
         {/* Grille des projets */}
         <div style={gridStyle}>
-          {filteredProjects.map((project, index) => (
-            <article 
+          {filteredProjects.map((project) => (
+            <article
               key={project.id}
               style={projectCardStyle(hoveredProject === project.id)}
               onMouseEnter={() => setHoveredProject(project.id)}
               onMouseLeave={() => setHoveredProject(null)}
               onClick={() => handleImageClick(project)}
             >
-              
               {/* Image */}
               <div style={imageContainerStyle}>
                 <img
                   src={getCurrentImage(project)}
-                  alt={project.title}
+                  alt={`${project.title} project screenshot`}
                   style={imageStyle(hoveredProject === project.id)}
                 />
                 <div style={statusBadgeStyle(project.status)}>
@@ -594,7 +531,6 @@ const Projects = () => {
 
               {/* Contenu */}
               <div style={contentStyle}>
-                
                 {/* En-tête */}
                 <div style={categoryStyle}>{project.category}</div>
                 <h3 style={projectTitleStyle}>{project.title}</h3>
@@ -617,30 +553,25 @@ const Projects = () => {
                     ))}
                   </div>
                 </div>
-
-                
               </div>
             </article>
           ))}
         </div>
-
-       
-
       </div>
 
       {/* Modal pour galerie d'images */}
       {selectedProject && (
-        <div 
+        <div
           style={modalOverlayStyle}
           onClick={closeModal}
         >
-          <div 
+          <div
             style={modalContentStyle}
             onClick={(e) => e.stopPropagation()}
           >
             <div style={modalHeaderStyle}>
               <h3 style={modalTitleStyle}>{selectedProject.title}</h3>
-              <button 
+              <button
                 style={closeButtonStyle}
                 onClick={closeModal}
                 onMouseEnter={(e) => {
@@ -655,14 +586,14 @@ const Projects = () => {
                 ✕
               </button>
             </div>
-            
+
             <div style={modalBodyStyle}>
               <div style={imageGalleryStyle}>
                 {selectedProject.images.map((image, index) => (
                   <img
                     key={index}
                     src={image}
-                    alt={`${selectedProject.title} - Image ${index + 1}`}
+                    alt={`${selectedProject.title} screenshot ${index + 1}`}
                     style={galleryImageStyle}
                     onMouseEnter={(e) => {
                       e.target.style.transform = 'scale(1.05)';
@@ -675,7 +606,7 @@ const Projects = () => {
                   />
                 ))}
               </div>
-              
+
               <div style={{ color: '#cbd5e1', lineHeight: '1.6' }}>
                 <p>{selectedProject.description}</p>
                 <div style={{ marginTop: '16px' }}>
@@ -752,22 +683,22 @@ const Projects = () => {
             .projects-container {
               padding: 80px 0 !important;
             }
-            
+
             .projects-max-width {
               padding: 0 16px !important;
             }
-            
+
             .projects-grid {
               grid-template-columns: 1fr !important;
               gap: 20px !important;
             }
-            
+
             .filter-nav {
               flex-wrap: wrap !important;
               gap: 8px !important;
               justify-content: center !important;
             }
-            
+
             .stats-grid {
               grid-template-columns: repeat(2, 1fr) !important;
               gap: 20px !important;
@@ -787,11 +718,11 @@ const Projects = () => {
             .project-content {
               padding: 24px !important;
             }
-            
+
             .tech-grid {
               gap: 6px !important;
             }
-            
+
             .tech-badge {
               font-size: 0.75rem !important;
               padding: 4px 8px !important;
@@ -808,3 +739,4 @@ const Projects = () => {
 };
 
 export default Projects;
+

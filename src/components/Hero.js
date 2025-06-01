@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 
 const Hero = () => {
   const [currentText, setCurrentText] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
-
+  
   const texts = [
     "Développeur Full Stack",
     "Créateur d'expériences web",
@@ -17,7 +17,7 @@ const Hero = () => {
       setCurrentText((prev) => (prev + 1) % texts.length);
     }, 3000);
     return () => clearInterval(interval);
-  }, []);
+  }, [texts.length]); // Added missing dependency
 
   const containerStyle = {
     minHeight: '100vh',
@@ -63,7 +63,8 @@ const Hero = () => {
     background: 'linear-gradient(to right, #60a5fa, #a78bfa, #f472b6)',
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
-    marginBottom: '24px',
+    marginTop: '-40px', // Fixed: combined margin properties
+    marginBottom: '30px',
     lineHeight: '1.1'
   };
 
@@ -97,18 +98,8 @@ const Hero = () => {
     border: '4px solid rgba(255, 255, 255, 0.1)',
     boxShadow: '0 25px 50px -12px rgba(139, 92, 246, 0.25)',
     position: 'relative',
-    zIndex: 2
-  };
-
-  const photoGlowStyle = {
-    position: 'absolute',
-    inset: '-20px',
-    background: 'linear-gradient(45deg, #3b82f6, #8b5cf6, #f472b6, #3b82f6)',
-    borderRadius: '50%',
-    opacity: 0.3,
-    filter: 'blur(20px)',
-    animation: 'rotate 8s linear infinite',
-    zIndex: 1
+    zIndex: 2,
+    marginTop: '-90px'
   };
 
   const buttonContainerStyle = {
@@ -171,22 +162,6 @@ const Hero = () => {
     border: '1px solid rgba(255, 255, 255, 0.2)'
   };
 
-  const achievementsStyle = {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(2, 1fr)',
-    gap: '20px',
-    marginTop: '32px'
-  };
-
-  const achievementItemStyle = {
-    textAlign: 'center',
-    background: 'rgba(255, 255, 255, 0.05)',
-    backdropFilter: 'blur(10px)',
-    borderRadius: '12px',
-    padding: '16px',
-    border: '1px solid rgba(255, 255, 255, 0.1)'
-  };
-
   return (
     <section id="hero" style={containerStyle}>
       <div style={contentStyle}>
@@ -201,30 +176,25 @@ const Hero = () => {
             border: '1px solid rgba(139, 92, 246, 0.3)',
             borderRadius: '50px',
             padding: '8px 16px',
-            marginBottom: '24px',
+            marginTop: '-50px',
+            marginBottom: '40px',
             fontSize: '0.875rem',
             color: '#a78bfa',
-            fontWeight: '500',
-             marginTop: '-50px',           // 👈 Collé en haut
-            marginBottom: '40px',
+            fontWeight: '500'
           }}>
             <span>🚀</span>
             Disponible pour de nouveaux projets
           </div>
-
-         <h1 style={{ 
-  ...titleStyle, 
-  marginTop: '-40px', // remonte
-  marginBottom: '30px' // espace en bas
-}}>
-  Salut, je suis <br />
-  <span style={{ color: '#f472b6' }}>Neji Ilef</span>
-</h1>
-
+          
+          <h1 style={titleStyle}>
+            Salut, je suis <br />
+            <span style={{ color: '#f472b6' }}>Neji Ilef</span>
+          </h1>
+          
           <p style={subtitleStyle}>
             Développeuse Full Stack passionnée
           </p>
-
+          
           <div style={animatedTextStyle}>
             <span style={{ opacity: 0.7 }}>Spécialisée en </span>
             <span style={{
@@ -236,20 +206,20 @@ const Hero = () => {
               {texts[currentText]}
             </span>
           </div>
-
+          
           <p style={{
             fontSize: '1.125rem',
             color: '#cbd5e1',
             lineHeight: '1.7',
             marginBottom: '32px'
           }}>
-            Je transforme vos idées en applications web modernes et performantes. 
+            Je transforme vos idées en applications web modernes et performantes.
             Avec plus de 3 ans d'expérience, je crée des solutions digitales qui font la différence.
           </p>
-
+          
           <div style={buttonContainerStyle}>
-            <a 
-              href="#projects" 
+            <a
+              href="#projects"
               style={primaryButtonStyle}
               onMouseEnter={(e) => {
                 e.target.style.transform = 'translateY(-2px)';
@@ -262,8 +232,8 @@ const Hero = () => {
             >
               <span>💼</span> Voir mes projets
             </a>
-            <a 
-              href="/cv.pdf" 
+            <a
+              href="/cv.pdf"
               download
               style={secondaryButtonStyle}
               onMouseEnter={(e) => {
@@ -280,20 +250,20 @@ const Hero = () => {
               <span>📄</span> Télécharger CV
             </a>
           </div>
-
+          
           <div style={socialLinksStyle}>
             {[
               { icon: '🐙', link: 'https://github.com/ilefneji', name: 'GitHub' },
-  { icon: '💼', link: 'https://www.linkedin.com/in/ilef-neji-723281262?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app', name: 'LinkedIn' },
-  { icon: '🐦', link: 'https://x.com/NejiIlef13250', name: 'Twitter' },
-  { icon: '📸', link: 'https://www.instagram.com/neji.ilef?igsh=MTF1Zjdyc3duMG8wZg%3D%3D&utm_source=qr', name: 'Instagram' },
-  { icon: '📘', link: 'https://www.facebook.com/ilef.neji.2025', name: 'Facebook' },
-  { icon: '📧', link: 'nejiilef92@gmail.com', name: 'Email' }
+              { icon: '💼', link: 'https://www.linkedin.com/in/ilef-neji-723281262?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app', name: 'LinkedIn' },
+              { icon: '🐦', link: 'https://x.com/NejiIlef13250', name: 'Twitter' },
+              { icon: '📸', link: 'https://www.instagram.com/neji.ilef?igsh=MTF1Zjdyc3duMG8wZg%3D%3D&utm_source=qr', name: 'Instagram' },
+              { icon: '📘', link: 'https://www.facebook.com/ilef.neji.2025', name: 'Facebook' },
+              { icon: '📧', link: 'mailto:nejiilef92@gmail.com', name: 'Email' }
             ].map((social, index) => (
               <a
                 key={index}
                 href={social.link}
-                target={social.link.startsWith('#') ? '_self' : '_blank'}
+                target={social.link.startsWith('#') || social.link.startsWith('mailto:') ? '_self' : '_blank'}
                 rel="noopener noreferrer"
                 style={socialLinkStyle}
                 title={social.name}
@@ -312,32 +282,20 @@ const Hero = () => {
               </a>
             ))}
           </div>
-
-          {/* Réalisations rapides */}
-          
         </div>
-
+        
         {/* Section Photo */}
         <div style={photoSectionStyle}>
           <div style={photoContainerStyle}>
-            {/* Effet de glow animé */}
-           
-            
             <img
-  src="moi.jpg"
-  alt="Votre Nom - Développeur Full Stack"
-  style={{
-    ...photoStyle,
-    marginTop: '-90px' // ← ajuste la valeur selon le rendu souhaité
-  }}
-/>
-
-
-            
+              src="moi.jpg"
+              alt="Neji Ilef - Développeur Full Stack"
+              style={photoStyle}
+            />
           </div>
         </div>
       </div>
-
+      
       {/* Indicateur de scroll */}
       <div style={{
         position: 'absolute',
@@ -353,7 +311,7 @@ const Hero = () => {
         opacity: isVisible ? 1 : 0,
         transition: 'all 1s ease 1s'
       }}>
-                <span>Découvrir mon travail</span>
+        <span>Découvrir mon travail</span>
         <div style={{
           width: '2px',
           height: '30px',
@@ -361,7 +319,7 @@ const Hero = () => {
           animation: 'bounce 2s infinite'
         }}></div>
       </div>
-
+      
       {/* Éléments décoratifs de fond */}
       <div style={{
         position: 'absolute',
@@ -387,7 +345,7 @@ const Hero = () => {
             }}
           />
         ))}
-
+        
         {/* Grille de fond */}
         <div style={{
           position: 'absolute',
@@ -400,7 +358,7 @@ const Hero = () => {
           opacity: 0.5
         }}></div>
       </div>
-
+      
       {/* Animations CSS */}
       <style>
         {`
@@ -412,7 +370,6 @@ const Hero = () => {
               transform: rotate(360deg);
             }
           }
-
           @keyframes bounce {
             0%, 20%, 50%, 80%, 100% {
               transform: translateY(0);
@@ -420,11 +377,10 @@ const Hero = () => {
             40% {
               transform: translateY(-10px);
             }
-            60% {
+                        60% {
               transform: translateY(-5px);
             }
           }
-
           @keyframes float {
             0%, 100% {
               transform: translateY(0px) rotate(0deg);
@@ -433,7 +389,6 @@ const Hero = () => {
               transform: translateY(-15px) rotate(180deg);
             }
           }
-
           @keyframes pulse {
             0%, 100% {
               opacity: 1;
@@ -444,7 +399,6 @@ const Hero = () => {
               transform: scale(1.05);
             }
           }
-
           /* Responsive Design */
           @media (max-width: 1024px) {
             .hero-content {
@@ -452,38 +406,36 @@ const Hero = () => {
               gap: 40px !important;
               text-align: center;
             }
-            
+                       
             .photo-container {
               width: 300px !important;
               height: 300px !important;
             }
           }
-
           @media (max-width: 768px) {
             .hero-content {
               padding: 0 20px !important;
             }
-            
+                       
             .photo-container {
               width: 250px !important;
               height: 250px !important;
             }
-            
+                       
             .button-container {
               flex-direction: column !important;
               align-items: center !important;
             }
-            
+                       
             .achievements-grid {
               grid-template-columns: repeat(4, 1fr) !important;
               gap: 12px !important;
             }
-            
+                       
             .social-links {
               justify-content: center !important;
             }
           }
-
           @media (max-width: 480px) {
             .achievements-grid {
               grid-template-columns: repeat(2, 1fr) !important;

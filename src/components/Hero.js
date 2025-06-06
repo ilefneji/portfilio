@@ -233,22 +233,23 @@ const Hero = () => {
               <span>💼</span> Voir mes projets
             </a>
             <a
-              href="/cv.pdf"
-              download
-              style={secondaryButtonStyle}
-              onMouseEnter={(e) => {
-                e.target.style.background = 'rgba(255, 255, 255, 0.1)';
-                e.target.style.borderColor = 'rgba(139, 92, 246, 0.5)';
-                e.target.style.transform = 'translateY(-2px)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = 'transparent';
-                e.target.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-                e.target.style.transform = 'translateY(0)';
-              }}
-            >
-              <span>📄</span> Télécharger CV
-            </a>
+  href="/ilef.pdf-2.pdf.pdf"
+  download="CV-Ilef-Neji.pdf"
+  style={secondaryButtonStyle}
+  onMouseEnter={(e) => {
+    e.target.style.background = 'rgba(255, 255, 255, 0.1)';
+    e.target.style.borderColor = 'rgba(139, 92, 246, 0.5)';
+    e.target.style.transform = 'translateY(-2px)';
+  }}
+  onMouseLeave={(e) => {
+    e.target.style.background = 'transparent';
+    e.target.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+    e.target.style.transform = 'translateY(0)';
+  }}
+>
+  <span>📄</span> Télécharger CV
+</a>
+
           </div>
           
           <div style={socialLinksStyle}>

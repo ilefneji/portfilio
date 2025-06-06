@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 
 const Projects = () => {
   const [activeFilter, setActiveFilter] = useState('Tous');
@@ -127,24 +127,27 @@ const Projects = () => {
     ? projects
     : projects.filter(project => project.category === activeFilter);
 
+  // Fonction pour gérer l'auto-rotation des images
+  const updateImageIndex = useCallback(() => {
+    setCurrentImageIndex(prev => {
+      const newIndex = { ...prev };
+      projects.forEach(project => {
+        if (project.images.length > 1) {
+          newIndex[project.id] = ((prev[project.id] || 0) + 1) % project.images.length;
+        }
+      });
+      return newIndex;
+    });
+  }, [projects]);
+
   useEffect(() => {
     setIsVisible(true);
     
     // Auto-rotation des images
-    const interval = setInterval(() => {
-      setCurrentImageIndex(prev => {
-        const newIndex = { ...prev };
-        projects.forEach(project => {
-          if (project.images.length > 1) {
-            newIndex[project.id] = ((prev[project.id] || 0) + 1) % project.images.length;
-          }
-        });
-        return newIndex;
-      });
-    }, 4000);
+    const interval = setInterval(updateImageIndex, 4000);
 
     return () => clearInterval(interval);
-  }, [projects]);
+  }, [updateImageIndex]);
 
   const containerStyle = {
     minHeight: '100vh',
@@ -396,7 +399,7 @@ const Projects = () => {
     position: 'relative'
   };
 
-  const modalHeaderStyle = {
+   const modalHeaderStyle = {
     padding: '24px 32px',
     borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
     display: 'flex',
@@ -411,7 +414,7 @@ const Projects = () => {
     margin: 0
   };
 
-    const closeButtonStyle = {
+  const closeButtonStyle = {
     background: 'rgba(255, 255, 255, 0.1)',
     border: 'none',
     borderRadius: '50%',
@@ -513,7 +516,7 @@ const Projects = () => {
               <div style={imageContainerStyle}>
                 <img
                   src={getCurrentImage(project)}
-                  alt={`${project.title} project screenshot`}
+                  alt={`${project.title} screenshot`}
                   style={imageStyle(hoveredProject === project.id)}
                 />
                 <div style={statusBadgeStyle(project.status)}>
@@ -593,7 +596,7 @@ const Projects = () => {
                   <img
                     key={index}
                     src={image}
-                    alt={`${selectedProject.title} screenshot ${index + 1}`}
+                    alt={`${selectedProject.title} view ${index + 1}`}
                     style={galleryImageStyle}
                     onMouseEnter={(e) => {
                       e.target.style.transform = 'scale(1.05)';
@@ -739,4 +742,3 @@ const Projects = () => {
 };
 
 export default Projects;
-

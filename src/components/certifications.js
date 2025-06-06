@@ -4,7 +4,7 @@ const Certifications = () => {
   const [visibleItems, setVisibleItems] = useState([]);
   const [filter, setFilter] = useState('all');
   
-  // Déplacer les certifications dans useMemo pour éviter la recréation
+  // CORRECTION : Utiliser useMemo pour éviter la recréation du tableau
   const certifications = useMemo(() => [
     {
       id: 1,
@@ -51,7 +51,7 @@ const Certifications = () => {
       status: "active",
       expiryDate: "2026"
     }
-  ], []); // Dépendances vides car les données sont statiques
+  ], []); // Tableau vide = ne changera jamais
 
   // Calculer les catégories basées sur les certifications
   const categories = useMemo(() => [
@@ -68,32 +68,14 @@ const Certifications = () => {
       : certifications.filter(cert => cert.category === filter);
   }, [filter, certifications]);
 
-  // useEffect avec les bonnes dépendances
+  // CORRECTION : useEffect avec les bonnes dépendances
   useEffect(() => {
     const timer = setTimeout(() => {
       setVisibleItems(filteredCertifications.map((_, index) => index));
     }, 100);
     
     return () => clearTimeout(timer);
-  }, [filteredCertifications]);
-
-  const getLevelColor = (level) => {
-    switch (level) {
-      case 'Professional': return 'linear-gradient(135deg, #8b5cf6, #ec4899)';
-      case 'Associate': return 'linear-gradient(135deg, #3b82f6, #06b6d4)';
-      case 'Fundamentals': return 'linear-gradient(135deg, #10b981, #34d399)';
-      default: return 'linear-gradient(135deg, #6b7280, #9ca3af)';
-    }
-  };
-
-  const getCategoryIcon = (category) => {
-    switch (category) {
-      case 'cloud': return '☁️';
-      case 'network': return '🌐';
-      case 'programming': return '💻';
-      default: return '🏆';
-    }
-  };
+  }, [filteredCertifications]); // Maintenant filteredCertifications est stable
 
   return (
     <section id="certifications" style={{
@@ -103,17 +85,6 @@ const Certifications = () => {
       position: 'relative',
       overflow: 'hidden'
     }}>
-      {/* Background Effects */}
-      <div style={{
-        position: 'absolute',
-        inset: 0,
-        backgroundImage: `
-          radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
-          radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%)
-        `,
-        pointerEvents: 'none'
-      }}></div>
-
       <div style={{
         maxWidth: '1200px',
         margin: '0 auto',
@@ -123,121 +94,26 @@ const Certifications = () => {
       }}>
         {/* Header Section */}
         <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            background: 'rgba(139, 92, 246, 0.1)',
-            border: '1px solid rgba(139, 92, 246, 0.3)',
-            borderRadius: '50px',
-            padding: '8px 20px',
-            marginBottom: '24px',
-            fontSize: '0.875rem',
-            color: '#a78bfa',
-            fontWeight: '600'
-          }}>
-            <span style={{ fontSize: '1.125rem' }}>🏆</span>
-            Mes Certifications
-          </div>
-          
           <h2 style={{
             fontSize: 'clamp(2.5rem, 5vw, 4rem)',
             fontWeight: '800',
             color: '#e2e8f0',
-            marginBottom: '24px',
-            lineHeight: '1.1'
+            marginBottom: '24px'
           }}>
-            Certifications & <span style={{
-              background: 'linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6)',
+            Mes <span style={{
+              background: 'linear-gradient(135deg, #60a5fa, #a78bfa)',
               WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
-            }}>Qualifications</span>
+              WebkitTextFillColor: 'transparent'
+            }}>Certifications</span>
           </h2>
-          
           <p style={{
             fontSize: '1.125rem',
             color: '#94a3b8',
             maxWidth: '600px',
-            margin: '0 auto 40px auto',
-            lineHeight: '1.6'
-          }}>
-            Mes certifications professionnelles validant mes compétences techniques
-            et ma maîtrise des technologies modernes du développement web.
-          </p>
-          
-          {/* Stats Grid */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
-            gap: '24px',
-            maxWidth: '600px',
             margin: '0 auto'
           }}>
-            <div style={{
-              background: 'rgba(255, 255, 255, 0.05)',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              borderRadius: '16px',
-              padding: '20px',
-              textAlign: 'center'
-            }}>
-              <div style={{
-                fontSize: '2rem',
-                fontWeight: '800',
-                background: 'linear-gradient(135deg, #60a5fa, #a78bfa)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                marginBottom: '8px'
-              }}>{certifications.length}</div>
-              <div style={{ fontSize: '0.875rem', color: '#94a3b8', fontWeight: '500' }}>
-                Certifications
-              </div>
-            </div>
-            <div style={{
-              background: 'rgba(255, 255, 255, 0.05)',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              borderRadius: '16px',
-              padding: '20px',
-              textAlign: 'center'
-            }}>
-              <div style={{
-                fontSize: '2rem',
-                fontWeight: '800',
-                background: 'linear-gradient(135deg, #60a5fa, #a78bfa)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                marginBottom: '8px'
-              }}>{new Set(certifications.map(c => c.provider)).size}</div>
-              <div style={{ fontSize: '0.875rem', color: '#94a3b8', fontWeight: '500' }}>
-                Organismes
-              </div>
-            </div>
-            <div style={{
-              background: 'rgba(255, 255, 255, 0.05)',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              borderRadius: '16px',
-              padding: '20px',
-              textAlign: 'center'
-            }}>
-              <div style={{
-                fontSize: '2rem',
-                fontWeight: '800',
-                background: 'linear-gradient(135deg, #60a5fa, #a78bfa)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                marginBottom: '8px'
-              }}>{certifications.filter(c => c.status === 'active').length}</div>
-              <div style={{ fontSize: '0.875rem', color: '#94a3b8', fontWeight: '500' }}>
-                Actives
-              </div>
-            </div>
-          </div>
+            Mes certifications professionnelles validant mes compétences techniques
+          </p>
         </div>
 
         {/* Filtres */}
@@ -246,8 +122,7 @@ const Certifications = () => {
           justifyContent: 'center',
           flexWrap: 'wrap',
           gap: '12px',
-          marginBottom: '60px',
-          padding: '0 20px'
+          marginBottom: '60px'
         }}>
           {categories.map((category) => (
             <button
@@ -260,13 +135,10 @@ const Certifications = () => {
                 background: filter === category.id 
                   ? 'linear-gradient(135deg, #3b82f6, #8b5cf6)'
                   : 'rgba(255, 255, 255, 0.05)',
-                backdropFilter: 'blur(10px)',
                 border: '1px solid rgba(255, 255, 255, 0.1)',
                 borderRadius: '50px',
                 padding: '12px 20px',
                 color: filter === category.id ? 'white' : '#e2e8f0',
-                fontWeight: '500',
-                fontSize: '0.875rem',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease'
               }}
@@ -277,10 +149,7 @@ const Certifications = () => {
                 background: 'rgba(255, 255, 255, 0.2)',
                 borderRadius: '12px',
                 padding: '2px 8px',
-                fontSize: '0.75rem',
-                fontWeight: '600',
-                minWidth: '20px',
-                textAlign: 'center'
+                fontSize: '0.75rem'
               }}>
                 {category.count}
               </span>
@@ -292,8 +161,7 @@ const Certifications = () => {
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
-          gap: '32px',
-          marginBottom: '80px'
+          gap: '32px'
         }}>
           {filteredCertifications.map((cert, index) => (
             <div
@@ -306,18 +174,7 @@ const Certifications = () => {
                 overflow: 'hidden',
                 transition: 'all 0.4s ease',
                 opacity: visibleItems.includes(index) ? 1 : 0,
-                transform: visibleItems.includes(index) ? 'translateY(0)' : 'translateY(30px)',
-                cursor: 'pointer'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-8px)';
-                e.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.3)';
-                e.currentTarget.style.boxShadow = '0 25px 50px -12px rgba(139, 92, 246, 0.25)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
-                e.currentTarget.style.boxShadow = 'none';
+                transform: visibleItems.includes(index) ? 'translateY(0)' : 'translateY(30px)'
               }}
             >
               {/* Header de la carte */}
@@ -327,22 +184,18 @@ const Certifications = () => {
                 background: 'linear-gradient(135deg, #1e293b 0%, #334155 50%, #1e293b 100%)',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                overflow: 'hidden'
+                justifyContent: 'center'
               }}>
                 <div style={{
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  gap: '16px',
-                  position: 'relative',
-                  zIndex: 2
+                  gap: '16px'
                 }}>
-                                    <div style={{
-                    fontSize: '4rem',
-                    filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))'
-                  }}>
-                    {getCategoryIcon(cert.category)}
+                  <div style={{ fontSize: '4rem' }}>
+                    {cert.category === 'cloud' ? '☁️' : 
+                     cert.category === 'network' ? '🌐' : 
+                     cert.category === 'programming' ? '💻' : '🏆'}
                   </div>
                   <div style={{
                     background: 'rgba(0, 0, 0, 0.6)',
@@ -350,40 +203,27 @@ const Certifications = () => {
                     padding: '8px 16px',
                     color: 'white',
                     fontSize: '0.875rem',
-                    fontWeight: '700',
-                    backdropFilter: 'blur(10px)'
+                    fontWeight: '700'
                   }}>
                     {cert.date}
                   </div>
                 </div>
                 
-                {/* Badge de niveau */}
                 <div style={{
                   position: 'absolute',
                   top: '16px',
                   right: '16px',
-                  background: getLevelColor(cert.level),
+                  background: cert.level === 'Professional' ? 'linear-gradient(135deg, #8b5cf6, #ec4899)' :
+                             cert.level === 'Associate' ? 'linear-gradient(135deg, #3b82f6, #06b6d4)' :
+                             'linear-gradient(135deg, #10b981, #34d399)',
                   borderRadius: '20px',
                   padding: '8px 16px',
                   color: 'white',
                   fontSize: '0.75rem',
-                  fontWeight: '600',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
+                  fontWeight: '600'
                 }}>
                   {cert.level}
                 </div>
-
-                {/* Effet de brillance */}
-                <div style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: '-100%',
-                  width: '100%',
-                  height: '100%',
-                  background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)',
-                  animation: 'shine 3s infinite',
-                  pointerEvents: 'none'
-                }}></div>
               </div>
 
               {/* Contenu */}
@@ -392,8 +232,7 @@ const Certifications = () => {
                   fontSize: '1.375rem',
                   fontWeight: '800',
                   color: '#e2e8f0',
-                  marginBottom: '8px',
-                  lineHeight: '1.3'
+                  marginBottom: '8px'
                 }}>
                   {cert.title}
                 </h3>
@@ -401,8 +240,7 @@ const Certifications = () => {
                   fontSize: '1rem',
                   fontWeight: '600',
                   color: '#60a5fa',
-                  marginBottom: '8px',
-                  lineHeight: '1.4'
+                  marginBottom: '8px'
                 }}>
                   {cert.subtitle}
                 </h4>
@@ -425,99 +263,40 @@ const Certifications = () => {
 
                 {/* Compétences */}
                 <div style={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  gap: '8px',
                   marginBottom: '20px'
                 }}>
-                  <div style={{
-                    fontSize: '0.75rem',
-                    color: '#cbd5e1',
-                    fontWeight: '600',
-                    marginBottom: '8px',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em'
-                  }}>
-                    Compétences
-                  </div>
-                  <div style={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    gap: '8px'
-                  }}>
-                    {cert.skills.slice(0, 3).map((skill, skillIndex) => (
-                      <span
-                        key={skillIndex}
-                        style={{
-                          background: 'rgba(139, 92, 246, 0.1)',
-                          border: '1px solid rgba(139, 92, 246, 0.3)',
-                          borderRadius: '16px',
-                          padding: '4px 12px',
-                          fontSize: '0.75rem',
-                          color: '#a78bfa',
-                          fontWeight: '500'
-                        }}
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                    {cert.skills.length > 3 && (
-                      <span style={{
-                        background: 'rgba(59, 130, 246, 0.1)',
-                        border: '1px solid rgba(59, 130, 246, 0.3)',
+                  {cert.skills.slice(0, 3).map((skill, skillIndex) => (
+                    <span
+                      key={skillIndex}
+                      style={{
+                        background: 'rgba(139, 92, 246, 0.1)',
+                        border: '1px solid rgba(139, 92, 246, 0.3)',
                         borderRadius: '16px',
                         padding: '4px 12px',
                         fontSize: '0.75rem',
-                        color: '#60a5fa',
+                        color: '#a78bfa',
                         fontWeight: '500'
-                      }}>
-                        +{cert.skills.length - 3}
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Informations supplémentaires */}
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 1fr',
-                  gap: '16px',
-                  marginBottom: '20px',
-                  padding: '16px',
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  borderRadius: '12px',
-                  border: '1px solid rgba(255, 255, 255, 0.05)'
-                }}>
-                  <div>
-                    <div style={{
+                      }}
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                  {cert.skills.length > 3 && (
+                    <span style={{
+                      background: 'rgba(59, 130, 246, 0.1)',
+                      border: '1px solid rgba(59, 130, 246, 0.3)',
+                      borderRadius: '16px',
+                      padding: '4px 12px',
                       fontSize: '0.75rem',
-                      color: '#94a3b8',
-                      marginBottom: '4px'
-                    }}>
-                      ID Certification
-                    </div>
-                    <div style={{
-                      fontSize: '0.8rem',
-                      color: '#e2e8f0',
-                      fontFamily: 'monospace',
+                      color: '#60a5fa',
                       fontWeight: '500'
                     }}>
-                      {cert.credentialId}
-                    </div>
-                  </div>
-                  <div>
-                    <div style={{
-                      fontSize: '0.75rem',
-                      color: '#94a3b8',
-                      marginBottom: '4px'
-                    }}>
-                      Expire en
-                    </div>
-                    <div style={{
-                      fontSize: '0.8rem',
-                      color: '#e2e8f0',
-                      fontWeight: '500'
-                    }}>
-                      {cert.expiryDate}
-                    </div>
-                  </div>
+                      +{cert.skills.length - 3}
+                    </span>
+                  )}
                 </div>
 
                 {/* Footer */}
@@ -533,43 +312,30 @@ const Certifications = () => {
                     style={{
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '8px',
+                      gap: '6px',
                       background: 'linear-gradient(135deg, #059669, #10b981)',
                       color: 'white',
                       textDecoration: 'none',
-                      padding: '10px 20px',
+                      padding: '8px 16px',
                       borderRadius: '20px',
                       fontSize: '0.875rem',
                       fontWeight: '600',
-                      transition: 'all 0.3s ease',
-                      boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.target.style.transform = 'translateY(-2px)';
-                      e.target.style.boxShadow = '0 8px 20px rgba(16, 185, 129, 0.4)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.target.style.transform = 'translateY(0)';
-                      e.target.style.boxShadow = '0 4px 12px rgba(16, 185, 129, 0.3)';
+                      transition: 'all 0.3s ease'
                     }}
                   >
-                    <span>🔗</span>
-                    Vérifier
+                    🔗 Vérifier
                   </a>
                   
                   <div style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '8px'
+                    gap: '6px'
                   }}>
                     <div style={{
                       width: '8px',
                       height: '8px',
                       borderRadius: '50%',
-                      background: cert.status === 'active' ? '#10b981' : '#ef4444',
-                      boxShadow: cert.status === 'active' 
-                        ? '0 0 8px rgba(16, 185, 129, 0.5)' 
-                        : '0 0 8px rgba(239, 68, 68, 0.5)'
+                      background: cert.status === 'active' ? '#10b981' : '#ef4444'
                     }}></div>
                     <span style={{
                       fontSize: '0.75rem',
@@ -584,119 +350,7 @@ const Certifications = () => {
             </div>
           ))}
         </div>
-
-        {/* Section CTA */}
-        <div style={{
-          background: 'rgba(255, 255, 255, 0.05)',
-          backdropFilter: 'blur(20px)',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
-          borderRadius: '24px',
-          padding: '40px',
-          textAlign: 'center',
-          marginTop: '60px'
-        }}>
-          <h3 style={{
-            fontSize: '1.5rem',
-            fontWeight: '700',
-            color: '#e2e8f0',
-            marginBottom: '16px'
-          }}>
-            Intéressé par mes compétences ?
-          </h3>
-          <p style={{
-            fontSize: '1rem',
-            color: '#94a3b8',
-            marginBottom: '24px',
-            maxWidth: '500px',
-            margin: '0 auto 24px auto'
-          }}>
-            Ces certifications reflètent mon engagement dans l'apprentissage continu 
-            et ma maîtrise des technologies modernes.
-          </p>
-          <div style={{
-            display: 'flex',
-            gap: '16px',
-            justifyContent: 'center',
-            flexWrap: 'wrap'
-          }}>
-            <a
-              href="#contact"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
-                color: 'white',
-                textDecoration: 'none',
-                padding: '12px 24px',
-                borderRadius: '20px',
-                fontWeight: '600',
-                transition: 'all 0.3s ease'
-              }}
-            >
-              💬 Me contacter
-            </a>
-            <a
-              href="#projects"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                background: 'rgba(255, 255, 255, 0.1)',
-                color: '#e2e8f0',
-                textDecoration: 'none',
-                padding: '12px 24px',
-                borderRadius: '20px',
-                fontWeight: '600',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-                transition: 'all 0.3s ease'
-              }}
-            >
-              🚀 Voir mes projets
-            </a>
-          </div>
-        </div>
       </div>
-
-      {/* Animations CSS */}
-      <style>
-        {`
-          @keyframes shine {
-            0% { left: -100%; }
-            100% { left: 100%; }
-          }
-
-          @media (max-width: 768px) {
-            #certifications {
-              padding: 80px 0 60px 0 !important;
-            }
-            
-            .certifications-grid {
-              grid-template-columns: 1fr !important;
-              gap: 24px !important;
-            }
-            
-            .cert-card {
-              margin: 0 auto !important;
-              max-width: 400px !important;
-            }
-          }
-
-          @media (max-width: 480px) {
-            .cert-header {
-              height: 150px !important;
-            }
-            
-            .cert-content {
-              padding: 20px !important;
-            }
-            
-            .cert-info-grid {
-              grid-template-columns: 1fr !important;
-            }
-          }
-        `}
-      </style>
     </section>
   );
 };

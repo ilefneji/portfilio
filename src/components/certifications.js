@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 const Certifications = () => {
   const [visibleItems, setVisibleItems] = useState([]);
   const [filter, setFilter] = useState('all');
-
+  
   const certifications = [
     {
       id: 1,
@@ -106,16 +106,23 @@ const Certifications = () => {
     { id: 'analytics', name: 'Analytics', icon: '📊', count: certifications.filter(c => c.category === 'analytics').length }
   ];
 
+  // CORRECTION: Calculer filteredCertifications directement dans useEffect
+  useEffect(() => {
+    const currentFiltered = filter === 'all'
+      ? certifications
+      : certifications.filter(cert => cert.category === filter);
+      
+    const timer = setTimeout(() => {
+      setVisibleItems(currentFiltered.map((_, index) => index));
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, [filter, certifications]);
+
+  // Pour l'affichage, recalculer filteredCertifications
   const filteredCertifications = filter === 'all'
     ? certifications
     : certifications.filter(cert => cert.category === filter);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setVisibleItems(filteredCertifications.map((_, index) => index));
-    }, 100);
-    return () => clearTimeout(timer);
-  }, [filter]);
 
   const getLevelColor = (level) => {
     switch (level) {
@@ -153,7 +160,6 @@ const Certifications = () => {
   return (
     <section id="certifications" className="certifications-section">
       <div className="container">
-        
         {/* Header Section */}
         <div className="header-content">
           <div className="section-badge">
@@ -169,7 +175,7 @@ const Certifications = () => {
             Mes certifications professionnelles validant mes compétences techniques
             et ma maîtrise des technologies modernes du développement web.
           </p>
-
+          
           {/* Stats rapides */}
           <div className="stats-grid">
             <div className="stat-item">
@@ -214,7 +220,6 @@ const Certifications = () => {
               className={`certification-card ${visibleItems.includes(index) ? 'visible' : ''}`}
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              
               {/* Header de la carte */}
               <div className="card-header">
                 <div className="cert-display">
@@ -300,7 +305,7 @@ const Certifications = () => {
               Découvrez comment ces certifications peuvent bénéficier à vos projets
             </p>
             <div className="cta-buttons">
-              <a href="Contact.js" className="cta-btn primary">
+              <a href="#contact" className="cta-btn primary">
                 <span>💬</span> Discutons ensemble
               </a>
               <a href="/cv.pdf" download className="cta-btn secondary">
@@ -357,7 +362,7 @@ const Certifications = () => {
           font-weight: 600;
         }
 
-        .badge-icon {
+                .badge-icon {
           font-size: 1.125rem;
           animation: bounce 2s infinite;
         }
@@ -369,6 +374,7 @@ const Certifications = () => {
           margin-bottom: 24px;
           line-height: 1.1;
         }
+
         .title-highlight {
           background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6);
           -webkit-background-clip: text;
@@ -833,7 +839,7 @@ const Certifications = () => {
           }
         }
 
-        @keyframes float {
+              @keyframes float {
           0%, 100% {
             transform: translateY(0px) rotate(0deg);
           }
@@ -845,106 +851,140 @@ const Certifications = () => {
         @keyframes pulse {
           0%, 100% {
             opacity: 1;
-            transform: scale(1);
           }
           50% {
-            opacity: 0.8;
-            transform: scale(1.05);
+            opacity: 0.5;
           }
         }
 
-               /* Responsive Design */
+        @keyframes slideInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes shimmer {
+          0% {
+            background-position: -200px 0;
+          }
+          100% {
+            background-position: calc(200px + 100%) 0;
+          }
+        }
+
+        /* Responsive Design */
         @media (max-width: 1024px) {
           .certifications-grid {
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 24px;
           }
-          .section-title {
-            font-size: clamp(2rem, 6vw, 3rem);
+          
+          .cta-section {
+            padding: 32px;
           }
         }
 
         @media (max-width: 768px) {
           .certifications-section {
-            padding: 100px 0 60px 0;
+            padding: 80px 0 60px 0;
           }
+
           .container {
             padding: 0 16px;
           }
-          .header-content {
-            margin-bottom: 40px;
+
+          .section-title {
+            font-size: 2.5rem;
           }
+
+          .section-description {
+            font-size: 1rem;
+          }
+
           .stats-grid {
             grid-template-columns: repeat(2, 1fr);
             gap: 16px;
           }
+
           .filters-container {
+            padding: 0 10px;
             gap: 8px;
-            margin-bottom: 40px;
           }
+
           .filter-btn {
             padding: 10px 16px;
-            font-size: 0.8125rem;
+            font-size: 0.8rem;
           }
-          .filter-text {
-            display: none;
-          }
-          .filter-icon {
-            font-size: 1.125rem;
-          }
+
           .certifications-grid {
             grid-template-columns: 1fr;
             gap: 20px;
-            margin-bottom: 60px;
           }
+
           .certification-card {
             margin: 0 auto;
             max-width: 400px;
           }
+
           .card-header {
-            height: 160px;
+            height: 150px;
           }
+
           .cert-icon {
             font-size: 3rem;
           }
+
           .card-content {
             padding: 20px;
           }
+
           .cert-title {
-            font-size: 1.125rem;
+            font-size: 1.25rem;
           }
-          .cert-subtitle {
-            font-size: 0.9375rem;
-          }
+
           .cert-info {
             grid-template-columns: 1fr;
             gap: 8px;
           }
+
           .card-footer {
             padding: 0 20px 20px 20px;
             flex-direction: column;
             gap: 12px;
             align-items: stretch;
           }
+
           .verify-btn {
             justify-content: center;
           }
+
           .cert-status {
             justify-content: center;
           }
+
           .cta-section {
-            padding: 32px 24px;
+            padding: 24px;
+            margin: 0 10px;
           }
+
           .cta-title {
             font-size: 1.5rem;
           }
+
           .cta-description {
             font-size: 1rem;
           }
+
           .cta-buttons {
             flex-direction: column;
             align-items: center;
           }
+
           .cta-btn {
             width: 100%;
             max-width: 280px;
@@ -953,310 +993,141 @@ const Certifications = () => {
         }
 
         @media (max-width: 480px) {
-          .certifications-section {
-            padding: 80px 0 40px 0;
+          .section-badge {
+            padding: 6px 16px;
+            font-size: 0.8rem;
           }
-          .container {
-            padding: 0 12px;
-          }
+
           .section-title {
-            font-size: clamp(1.75rem, 8vw, 2.5rem);
+            font-size: 2rem;
           }
-          .section-description {
-            font-size: 1rem;
-          }
+
           .stats-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            grid-template-columns: 1fr;
+            max-width: 200px;
           }
+
           .stat-item {
-            padding: 16px 12px;
+            padding: 16px;
           }
+
           .stat-number {
             font-size: 1.5rem;
           }
-          .stat-label {
-            font-size: 0.75rem;
-          }
+
           .filters-container {
-            gap: 6px;
-            padding: 0 8px;
+            flex-direction: column;
+            align-items: center;
           }
+
           .filter-btn {
-            padding: 8px 12px;
-            min-width: 44px;
+            width: 100%;
+            max-width: 200px;
+            justify-content: center;
           }
-          .filter-count {
-            font-size: 0.6875rem;
-            padding: 1px 6px;
-          }
-          .certifications-grid {
-            gap: 16px;
-          }
+
           .certification-card {
             max-width: 100%;
           }
-          .card-header {
-            height: 140px;
-          }
-          .cert-icon {
-            font-size: 2.5rem;
-          }
-          .level-badge {
-            top: 12px;
-            right: 12px;
-            padding: 6px 12px;
-            font-size: 0.6875rem;
-          }
-          .cert-year-badge {
-            padding: 6px 12px;
-            font-size: 0.75rem;
-          }
-          .card-content {
-            padding: 16px;
-          }
-          .cert-title {
-            font-size: 1rem;
-          }
-          .cert-subtitle {
-            font-size: 0.875rem;
-          }
-          .cert-provider {
-            font-size: 0.8125rem;
-          }
-          .cert-description {
-            font-size: 0.8125rem;
-          }
-          .skills-container {
-            gap: 6px;
-          }
-          .skill-tag {
-            padding: 3px 8px;
-            font-size: 0.6875rem;
-          }
-          .info-label {
-            font-size: 0.6875rem;
-          }
-          .info-value {
-            font-size: 0.8125rem;
-          }
-          .card-footer {
-            padding: 0 16px 16px 16px;
-          }
-          .verify-btn {
-            padding: 6px 12px;
-            font-size: 0.8125rem;
-          }
-          .status-text {
-            font-size: 0.6875rem;
-          }
-          .cta-section {
-            padding: 24px 16px;
-          }
-          .cta-title {
-            font-size: 1.25rem;
-          }
-          .cta-description {
-            font-size: 0.875rem;
-          }
-          .cta-btn {
-            padding: 12px 24px;
-            font-size: 0.875rem;
-          }
-        }
 
-        @media (max-width: 320px) {
-          .container {
-            padding: 0 8px;
-          }
-          .section-title {
-            font-size: 1.5rem;
-          }
-          .stats-grid {
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-          }
-          .stat-item {
-            padding: 12px 8px;
-          }
-          .stat-number {
-            font-size: 1.25rem;
-          }
-          .filters-container {
-            gap: 4px;
-          }
-          .filter-btn {
-            padding: 6px 8px;
-            min-width: 40px;
-          }
           .card-header {
             height: 120px;
           }
+
           .cert-icon {
-            font-size: 2rem;
+            font-size: 2.5rem;
           }
+
           .level-badge {
-            padding: 4px 8px;
-            font-size: 0.625rem;
+            position: static;
+            margin-top: 12px;
+            align-self: center;
           }
+
           .card-content {
-            padding: 12px;
+            padding: 16px;
           }
+
           .cert-title {
-            font-size: 0.9375rem;
-          }
-          .cert-subtitle {
-            font-size: 0.8125rem;
-          }
-          .cta-section {
-            padding: 20px 12px;
-          }
-          .cta-title {
             font-size: 1.125rem;
           }
+
+          .skills-container {
+            gap: 6px;
+          }
+
+          .skill-tag {
+            font-size: 0.7rem;
+            padding: 3px 8px;
+          }
+
+          .cta-section {
+            padding: 20px 16px;
+            margin: 0;
+            border-radius: 16px;
+          }
+
+          .cta-title {
+            font-size: 1.25rem;
+          }
+
+          .cta-description {
+            font-size: 0.9rem;
+          }
         }
 
-        /* Améliorations pour l'accessibilité */
+        /* Améliorations d'accessibilité */
         @media (prefers-reduced-motion: reduce) {
-          * {
-            animation-duration: 0.01ms !important;
-            animation-iteration-count: 1 !important;
-            transition-duration: 0.01ms !important;
+          .certification-card,
+          .filter-btn,
+          .verify-btn,
+          .cta-btn,
+          .cert-icon,
+          .status-indicator {
+            animation: none;
+            transition: none;
           }
-        }
 
-        /* Focus states pour l'accessibilité */
-        .filter-btn:focus,
-        .verify-btn:focus,
-        .cta-btn:focus {
-          outline: 2px solid #a78bfa;
-          outline-offset: 2px;
-        }
-
-        /* Amélioration des contrastes */
-        @media (prefers-contrast: high) {
-          .certification-card {
-            border-color: rgba(255, 255, 255, 0.3);
-          }
-          .cert-title {
-            color: #ffffff;
-          }
-          .cert-description {
-            color: #cbd5e1;
+          .card-shine {
+            display: none;
           }
         }
 
         /* Mode sombre amélioré */
         @media (prefers-color-scheme: dark) {
           .certifications-section {
-            background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%);
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
+          }
+
+          .certification-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(255, 255, 255, 0.08);
+          }
+
+          .card-header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
           }
         }
 
-        /* Optimisations de performance */
-        .certification-card {
-          will-change: transform;
+        /* Effets de focus pour l'accessibilité */
+        .filter-btn:focus,
+        .verify-btn:focus,
+        .cta-btn:focus {
+          outline: 2px solid #60a5fa;
+          outline-offset: 2px;
         }
 
-        .card-shine {
-          will-change: left;
+        /* Amélioration des contrastes */
+        .cert-description {
+          color: #b8c5d1;
         }
 
-        /* États de chargement */
-        .certification-card.loading {
-          opacity: 0.6;
-          pointer-events: none;
+        .info-label {
+          color: #7c8b9a;
         }
 
-        .certification-card.loading::after {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(
-            90deg,
-            transparent,
-            rgba(255, 255, 255, 0.1),
-            transparent
-          );
-          animation: shimmer 1.5s infinite;
-        }
-
-        @keyframes shimmer {
-          0% {
-            transform: translateX(-100%);
-          }
-          100% {
-            transform: translateX(100%);
-          }
-        }
-
-        /* Effets de hover améliorés pour desktop */
-        @media (hover: hover) {
-          .certification-card:hover .cert-icon {
-            transform: scale(1.1) rotate(10deg);
-            transition: transform 0.3s ease;
-          }
-          .certification-card:hover .level-badge {
-            transform: scale(1.05);
-          }
-          .certification-card:hover .cert-year-badge {
-            transform: scale(1.05);
-          }
-        }
-
-        /* Support pour les écrans haute résolution */
-        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-          .cert-icon {
-            image-rendering: -webkit-optimize-contrast;
-            image-rendering: crisp-edges;
-          }
-        }
-
-        /* Amélioration de la lisibilité */
-        .cert-title,
-        .cert-subtitle,
-        .cert-provider {
-          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Effet de gradient pour les bordures */
-        .certification-card::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          padding: 1px;
-          background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(59, 130, 246, 0.3));
-          border-radius: 24px;
-          mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-          mask-composite: exclude;
-          opacity: 0;
-          transition: opacity 0.3s ease;
-        }
-
-        .certification-card:hover::before {
-          opacity: 1;
-        }
-
-        /* Amélioration des transitions */
-        .skill-tag,
-        .verify-btn,
-        .filter-btn,
-        .cta-btn {
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* Effet de parallaxe subtil */
-        .card-header::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(59, 130, 246, 0.05));
-          transform: translateZ(0);
-          transition: transform 0.3s ease;
-        }
-
-        .certification-card:hover .card-header::before {
-          transform: translateZ(0) scale(1.05);
+        .status-text {
+          color: #a1aab4;
         }
       `}</style>
     </section>
@@ -1265,5 +1136,3 @@ const Certifications = () => {
 
 export default Certifications;
 
-
-        
